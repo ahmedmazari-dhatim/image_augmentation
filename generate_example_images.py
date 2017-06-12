@@ -16,49 +16,44 @@ def main():
     draw_per_augmenter_images()
 
 def draw_single_sequential_images():
-    image = misc.imresize(ndimage.imread("quokka.jpg")[0:643, 0:643], (128, 128))
+    image = ndimage.imread("/home/ahmed/Downloads/test/brut_image/number.png")
 
     st = lambda aug: iaa.Sometimes(0.3, aug)
 
     seq = iaa.Sequential([
-            iaa.Fliplr(0.5),
             iaa.Flipud(0.5),
-            st(iaa.Superpixels(p_replace=(0, 1.0), n_segments=(20, 200))),
-            st(iaa.Crop(percent=(0, 0.1))),
-            st(iaa.GaussianBlur((0, 3.0))),
-            st(iaa.Sharpen(alpha=(0, 1.0), lightness=(0.75, 1.5))),
-            st(iaa.Emboss(alpha=(0, 1.0), strength=(0, 2.0))),
-            st(iaa.Sometimes(0.5,
-                iaa.EdgeDetect(alpha=(0, 0.7)),
-                iaa.DirectedEdgeDetect(alpha=(0, 0.7), direction=(0.0, 1.0)),
-            )),
-            st(iaa.AdditiveGaussianNoise(loc=0, scale=(0.0, 0.05*255), per_channel=0.5)),
-            st(iaa.Dropout((0.0, 0.1), per_channel=0.5)),
+            iaa.GaussianBlur(3.0),
+            st(iaa.Sharpen(alpha=1.0, lightness=0.25)),
+            st(iaa.Emboss(alpha=1.0, strength=2.0)),
+            st(iaa.AdditiveGaussianNoise(loc=0, scale=0.05*255, per_channel=0.5)),
+            st(iaa.Dropout(0.1, per_channel=0.5)),
             st(iaa.Invert(0.25, per_channel=True)),
-            st(iaa.Add((-10, 10), per_channel=0.5)),
-            st(iaa.Multiply((0.5, 1.5), per_channel=0.5)),
-            st(iaa.ContrastNormalization((0.5, 2.0), per_channel=0.5)),
-            st(iaa.Grayscale(alpha=(0.0, 1.0), name="Grayscale")),
+            st(iaa.ElasticTransformation(alpha=3.5, sigma=0.25)),
             st(iaa.Affine(
-                scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
-                translate_px={"x": (-16, 16), "y": (-16, 16)},
-                rotate=(-45, 45),
-                shear=(-16, 16),
-                order=[0, 1],
-                cval=(0, 255),
-                mode=ia.ALL
-            )),
-            st(iaa.ElasticTransformation(alpha=(0.5, 3.5), sigma=0.25))
+               # scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
+                #translate_px={"x": (-16, 16), "y": (-16, 16)},
+                rotate=(-90, 90),
+
+            ))
+
         ],
-        random_order=True
+        random_order=False
     )
 
-    grid = seq.draw_grid(image, cols=8, rows=8)
-    misc.imsave("examples_grid.jpg", grid)
+    grid = seq.draw_grid(image, cols=9, rows=1)
+    misc.imsave("/home/ahmed/Downloads/test/grid.png", grid)
+
+    print(len(seq))
+    n = len(seq)
+    images_aug = seq.augment_images([image] * n)
+
+    print(len(images_aug))
+    for i, image_aug in enumerate(images_aug):
+        misc.imsave("/home/ahmed/Downloads/test/3be7fd82-a2e7-4cf8-91a8-279bd6b7bfc0.png_%04d.png" % (i,), image_aug)
 
 def draw_per_augmenter_images():
     print("[draw_per_augmenter_images] Loading image...")
-    image = misc.imresize(ndimage.imread("quokka.jpg")[0:643, 0:643], (128, 128))
+    image = ndimage.imread("/home/ahmed/Downloads/test/brut_image/number.png")
     #image = misc.imresize(data.chelsea()[0:300, 50:350, :], (128, 128))
     #image = misc.imresize(data.astronaut(), (128, 128))
 
@@ -170,7 +165,7 @@ def draw_per_augmenter_images():
                 ax.text(x, y, row_titles[col_idx-1], color="black", fontsize=7)
 
 
-    fig.savefig("examples.jpg", bbox_inches="tight")
+    #fig.savefig("/home/ahmed/Downloads/test/example.png", bbox_inches="tight")
     #plt.show()
 
 if __name__ == "__main__":
