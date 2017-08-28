@@ -257,7 +257,7 @@ class FromLowerResolution(StochasticParameter):
             #w_small = max(int(w * size_factor), self.min_size)
             h_small = max(hw_px[0], self.min_size)
             w_small = max(hw_px[1], self.min_size)
-            samples = self.other_param.draw_samples((1, h_small, w_small, c))
+            samples = self.other_param.draw_samples((1, h_small, w_small, c), random_state=random_state)
             samples_upscaled = ia.imresize_many_images(samples, (h, w), interpolation=method)
             if result is None:
                 result = np.zeros((n, h, w, c), dtype=samples.dtype)
@@ -314,3 +314,24 @@ class Clip(StochasticParameter):
             return "Clip(%s, None, %.6f)" % (opstr, float(self.maxval))
         else:
             return "Clip(%s, None, None)" % (opstr,)
+
+class Multiply(StochasticParameter):
+    def __init__(self, other_param, val):
+        super(Multiply, self).__init__()
+
+        assert isinstance(other_param, StochasticParameter)
+        assert ia.is_single_number(val)
+
+        self.other_param = other_param
+        self.val = val
+
+    def _draw_samples(self, size, random_state):
+        samples = self.other_param.draw_samples(size, random_state=random_state)
+        return samples * self.val
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        opstr = str(self.other_param)
+        return "Multiply(%s, %s)" % (opstr, str(self.val))

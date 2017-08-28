@@ -18,7 +18,7 @@ import os
 import sys
 
 
-st = lambda aug: iaa.Sometimes(1.0, aug)
+st = lambda aug: iaa.Sometimes(0.3, aug)
 
 class BinomialRows(StochasticParameter):
     def __init__(self, p):
@@ -90,10 +90,10 @@ def draw_horizontal_line(input):
     #cv2.imshow("image",horizontal_line)
     #cv2.waitKey(0)
     input = input.rsplit('.')[0]
-    cv2.imwrite('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+str(input)+'_horizontalline.png',horizontal_line)
+    cv2.imwrite('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+str(input)+'_horizontalline.png',horizontal_line)
     cv2.destroyAllWindows()
 
-    print("super")
+    #print("super")
 
 def draw_diagonal_line(input):
 
@@ -102,10 +102,10 @@ def draw_diagonal_line(input):
     h,w=image2.shape[0:2]
     diagonal_line= cv2.line(image2,(0,0),(w,h),(0,0,0),2)
     input = input.rsplit('.')[0]
-    cv2.imwrite('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+str(input)+'_diagonalline.png', diagonal_line)
+    cv2.imwrite('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+str(input)+'_diagonalline.png', diagonal_line)
     cv2.destroyAllWindows()
 
-    print("super")
+    #print("super")
 
 def draw_diagonal_inverse_line(input):
 
@@ -114,10 +114,10 @@ def draw_diagonal_inverse_line(input):
     h,w=image3.shape[0:2]
     diagonal_inverse_line= cv2.line(image3,(0,h),(w,0),(0,0,0),2)
     input = input.rsplit('.')[0]
-    cv2.imwrite('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+str(input)+'_diagonalinverseline.png', diagonal_inverse_line)
+    cv2.imwrite('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+str(input)+'_diagonalinverseline.png', diagonal_inverse_line)
     cv2.destroyAllWindows()
 
-    print("super")
+    #print("super")
 
 def draw_vertical_left_line(input):
 
@@ -126,10 +126,10 @@ def draw_vertical_left_line(input):
     h,w=image4.shape[0:2]
     vertical_left_line= cv2.line(image4,(0,0),(0,h),(0,0,0),4)
     input = input.rsplit('.')[0]
-    cv2.imwrite('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+str(input)+'_verticalleftline.png', vertical_left_line)
+    cv2.imwrite('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+str(input)+'_verticalleftline.png', vertical_left_line)
     cv2.destroyAllWindows()
 
-    print("super")
+    #print("super")
 
 def draw_vertical_right_line(input):
 
@@ -138,10 +138,10 @@ def draw_vertical_right_line(input):
     h, w = image5.shape[0:2]
     vertical_right_line = cv2.line(image5, (w, 0), (w,h), (0, 0, 0), 4)
     input = input.rsplit('.')[0]
-    cv2.imwrite('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+str(input)+'_verticalrightline.png', vertical_right_line)
+    cv2.imwrite('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+str(input)+'_verticalrightline.png', vertical_right_line)
     cv2.destroyAllWindows()
 
-    print("super")
+    #print("super")
 
 def draw_several_rows_line(input):
 
@@ -153,9 +153,9 @@ def draw_several_rows_line(input):
         iaa.Dropout(p=BinomialRows(1 - p_row))])
     new_image=aug.augment_image(image6)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+str(input)+'_severalrowsline.png', new_image)
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+str(input)+'_severalrowsline.png', new_image)
 
-    print("super")
+    #print("super")
 
 def draw_several_cols_line(input):
     image7 = cv2.imread(input)
@@ -165,8 +165,8 @@ def draw_several_cols_line(input):
     aug7 = iaa.Sequential([ iaa.Dropout(p=BinomialColumns(1 - p_column))])
     new_image7=aug7.augment_image(image7)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+str(input)+'_severalcolsline.png', new_image7)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+str(input)+'_severalcolsline.png', new_image7)
+    #print("super")
 def draw_several_cols_rows_line(input):
     image8 = cv2.imread(input)
     #label = input.rsplit('/', 1)[1].rsplit('.', 1)[0]
@@ -179,11 +179,27 @@ def draw_several_cols_rows_line(input):
     ])
     new_image8=aug8.augment_image(image8)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+str(input)+'_severalcolsrowsline.png', new_image8)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+str(input)+'_severalcolsrowsline.png', new_image8)
+    #print("super")
 
 
 
+def elasticdeformation(input):
+
+    image18 = cv2.imread(input)
+    #label = input.rsplit('/', 1)[1].rsplit('.', 1)[0]
+    h, w = image18.shape[0:2]
+    seq18 = st(iaa.ElasticTransformation(alpha=0.75, sigma=0.2))
+    #y = seq18.name.rsplit('Unnamed')[1]
+    images_aug18=seq18.draw_grid(image18,cols=1,rows=1)
+    #images_aug18=seq18.augment_image(image18)
+    input = input.rsplit('.')[0]
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/' + str(input) + '_elasticdeformation.png', images_aug18)
+    #print("super")
+
+
+
+'''
 def flipud(input):
     image9 = cv2.imread(input)
     #label = input.rsplit('/', 1)[1].rsplit('.', 1)[0]
@@ -196,8 +212,9 @@ def flipud(input):
     misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/' + str(input) + '_flipud.png', images_aug9)
 
 
-    print("super")
-
+    #print("super")
+'''
+'''
 def fliplr(input):
     image10 = cv2.imread(input)
     #label = input.rsplit('/', 1)[1].rsplit('.', 1)[0]
@@ -208,9 +225,9 @@ def fliplr(input):
     images_aug10=seq10.draw_grid(image10,cols=1,rows=1)
     input = input.rsplit('.')[0]
     misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/' + str(input) + '_fliplr.png', images_aug10)
-    print("super")
+    #print("super")
 
-
+'''
 def superpixel(input):
     image11 = cv2.imread(input)
     #label = input.rsplit('/', 1)[1].rsplit('.', 1)[0]
@@ -219,8 +236,8 @@ def superpixel(input):
     y = seq11.name.rsplit('Unnamed')[1]
     images_aug11=seq11.draw_grid(image11,cols=1,rows=1)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/' + str(input) + '_superpixel.png', images_aug11)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/' + str(input) + '_superpixel.png', images_aug11)
+    #print("super")
 
 def gaussianblur(input):
     image12 = cv2.imread(input)
@@ -230,8 +247,8 @@ def gaussianblur(input):
     y = seq12.name.rsplit('Unnamed')[1]
     images_aug12=seq12.draw_grid(image12,cols=1,rows=1)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/' + str(input) + '_gaussianblur.png', images_aug12)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/' + str(input) + '_gaussianblur.png', images_aug12)
+    #print("super")
 
 
 
@@ -246,8 +263,8 @@ def additivegaussiannoise(input):
     y = seq14.name.rsplit('Unnamed')[1]
     images_aug14=seq14.draw_grid(image14,cols=1,rows=1)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/' + str(input) + '_additivegaussiannoise.png', images_aug14)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/' + str(input) + '_additivegaussiannoise.png', images_aug14)
+    #print("super")
 
 
 
@@ -260,8 +277,8 @@ def dropout(input):
     y = seq15.name.rsplit('Unnamed')[1]
     images_aug15=seq15.draw_grid(image15,cols=1,rows=1)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/' + str(input) + '_dropout.png', images_aug15)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/' + str(input) + '_dropout.png', images_aug15)
+    #print("super")
 
 def translation(input):
 
@@ -272,8 +289,8 @@ def translation(input):
     y = seq16.name.rsplit('Unnamed')[1]
     images_aug16=seq16.draw_grid(image16,cols=1,rows=1)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/' + str(input) + '_translation.png', images_aug16)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/' + str(input) + '_translation.png', images_aug16)
+    #print("super")
 
 def rotation(input,r):
 
@@ -282,21 +299,23 @@ def rotation(input,r):
     h, w = image17.shape[0:2]
     seq17 = rotate(image17, r, reshape=True)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/'+ str(input) + '_rotation'+str(r)+'.png', seq17)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/'+ str(input) + '_rotation'+str(r)+'.png', seq17)
+    #print("super")
 
 
-def elasticdeformation(input):
 
-    image18 = cv2.imread(input)
+
+def sharpen(input):
+    image13 = cv2.imread(input)
     #label = input.rsplit('/', 1)[1].rsplit('.', 1)[0]
-    h, w = image18.shape[0:2]
-    seq18 = st(iaa.ElasticTransformation(alpha=1.25, sigma=0.2))
-    y = seq18.name.rsplit('Unnamed')[1]
-    images_aug18=seq18.draw_grid(image18,cols=1,rows=1)
+    h, w = image13.shape[0:2]
+    seq13 = st(iaa.Sharpen(alpha=1.0, lightness=0.15))
+    #y = seq13.name.rsplit('Unnamed')[1]
+    images_aug13=seq13.draw_grid(image13,cols=1,rows=1)
     input = input.rsplit('.')[0]
-    misc.imsave('/home/ahmed/Pictures/cogedis/augmented_cogedis/' + str(input) + '_elasticdeformation.png', images_aug18)
-    print("super")
+    misc.imsave('/home/ahmed/Pictures/cogedis/24072017/all_augmented/' + str(input) + '_sharpen.png', images_aug13)
+    #
+    # print("super")
 
 
 
@@ -309,7 +328,7 @@ def rotation(input,r):
     y = seq.name.rsplit('Unnamed')[1]
 +    images_aug=seq.draw_grid(image,cols=1,rows=1)
     misc.imsave('/home/ahmed/Downloads/test/try/' + str(label) + '_rotation'+str(r)+'.png', images_aug)
-    print("super")
+    #print("super")
 
 def rotation90(input,r):
     image = cv2.imread(input)
@@ -319,7 +338,7 @@ def rotation90(input,r):
     y = seq.name.rsplit('Unnamed')[1]
     images_aug=seq.draw_grid(image,cols=1,rows=1)
     misc.imsave('/home/ahmed/Downloads/test/try/' + str(label) + '_rotation'+str(r)+'.png', images_aug)
-    print("super")
+    #print("super")
 '''
 
 
@@ -327,27 +346,32 @@ def rotation90(input,r):
 
 def main_1():
 
-    path='/home/ahmed/Pictures/cogedis/cogedis_words_3/'
+    path='/home/ahmed/Pictures/cogedis/24072017/all/'
     os.chdir(path)
     images_name = glob.glob("*.png")
-    print("as")
+    #print("as")
     for img in images_name:
-        print("ok")
-        draw_several_cols_line(img)
-        draw_several_rows_line(img)
+        print(img)
+
+        #print("ok")
+        #draw_several_cols_line(img)
+        #draw_several_rows_line(img)
         draw_horizontal_line(img)
-        draw_diagonal_line(img)
-        draw_diagonal_inverse_line(img)
+        #draw_diagonal_line(img)
+        #draw_diagonal_inverse_line(img)
         draw_vertical_left_line(img)
         draw_vertical_right_line(img)
-        draw_several_cols_rows_line(img)
+        #draw_several_cols_rows_line(img)
         translation(img)
         superpixel(img)
         additivegaussiannoise(img)
-        flipud(img)
-        fliplr(img)
-        rotation(img, 90)
-        rotation(img, -90)
+        elasticdeformation(img)
+        gaussianblur(img)
+        sharpen(img)
+        #flipud(img)
+        #fliplr(img)
+        #rotation(img, 90)
+        #rotation(img, -90)
         rotation(img, 5)
         rotation(img, -5)
         dropout(img)

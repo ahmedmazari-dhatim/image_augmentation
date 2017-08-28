@@ -9,7 +9,8 @@ def find_group(val):
 
 
 
-df = pd.read_csv('/home/ahmed/Pictures/cogedis/cogedis_words_3/words.csv',sep=',')
+#df = pd.read_csv('/home/ahmed/Pictures/cogedis/24072017/split/digit+char/digit+char.csv',sep=',')
+df = pd.read_csv('/home/ahmed/Pictures/cogedis/words/ABBY.csv',sep=',')
 df = df.astype(str)
 df=df.replace(['é','è','È','É'],'e', regex=True)
 df=df.replace(['à','â','À'],'a', regex=True)
